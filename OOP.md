@@ -966,5 +966,432 @@ class Demo {
 }
 ```
 
-# Example codes
+# Exam Examples
+
+## Palestra
+
+### ExampleApp.java
+
+```java
+import java.util.ArrayList;
+import palestra.*;
+
+public class Esempio {
+
+	public static void main(String[] args) throws SchedaNonEsistenteException, UtenteNonEsistenteException {
+
+		Palestra p = new Palestra();
+		
+		System.out.println("\n/****** R1 ******/");
+		
+		System.out.println("Nuove iscrizioni");
+		Iscritto i1 = p.nuovaIscrizione("Mario", "Rossi", "Uomo", 25, 84.5);
+		Iscritto i2 = p.nuovaIscrizione("Paolo", "Bianchi", "Uomo", 28, 80.1);
+		Iscritto i3 = p.nuovaIscrizione("Anna", "Verdi", "Donna", 22, 57.9);
+		
+		System.out.println("\nUtenti iscritti:\n");
+		System.out.println(i1.descriviti());
+		System.out.println(i2.descriviti());
+		System.out.println(i3.descriviti());
+		
+		System.out.println("\nRicerca iscritto:\n");
+		Iscritto iTrovato = p.cercaIscrittoPerId(1);
+		System.out.println(iTrovato.descriviti());
+		
+		System.out.println("\nRicerca iscritto/i per nome e cognome:\n");
+		ArrayList<Iscritto> iTrovatiNomeCognome = new ArrayList<>(p.cercaIscrittoPerNomeCognome("o", "i"));
+		for(Iscritto ii : iTrovatiNomeCognome)
+			System.out.println(ii.descriviti());
+		
+		System.out.println("\nElenco iscritti:\n");
+		ArrayList<Iscritto> elencoIscritti = new ArrayList<>(p.elencoIscritti());
+		for(Iscritto ii : elencoIscritti)
+			System.out.println(ii.descriviti());
+		
+		System.out.println("\n/****** R2 ******/");
+		
+		System.out.println("Nuovi esercizi");
+		Esercizio e1 = p.nuovoEsercizio("rpj", "Rope-Jump", 20);
+		Esercizio e2 = p.nuovoEsercizio("sqt", "Squat", 6, 120);
+		Esercizio e3 = p.nuovoEsercizio("brp", "Burpees", 10);
+		Esercizio e4 = p.nuovoEsercizio("psu", "Push-up", 24.5);
+		Esercizio e5 = p.nuovoEsercizio("pu", "Pull-up", 34.5);
+		Esercizio e6 = p.nuovoEsercizio("ddl", "Deadlift", 6, 150);
+		
+		System.out.println("\nEsercizi creati:\n");
+		System.out.println(e1.descriviti());
+		System.out.println(e2.descriviti());
+		System.out.println(e3.descriviti());
+		System.out.println(e4.descriviti());
+		System.out.println(e5.descriviti());
+		System.out.println(e6.descriviti());
+		
+		System.out.println("\nRicerca esercizio:\n");
+		Esercizio eTrovato = p.esercizio("sqt");
+		System.out.println(eTrovato.descriviti());
+		
+		System.out.println("\nElenco esercizi:\n");
+		ArrayList<Esercizio> elencoEsercizi = new ArrayList<>(p.esercizi());
+		for(Esercizio ei : elencoEsercizi)
+			System.out.println(ei.descriviti());
+		
+		System.out.println("\nElenchi esercizi");
+		System.out.println("\nCodice, alfabeticamente:\n");
+		ArrayList<Esercizio> elenco1 = new ArrayList<>(p.elencoEserciziPerCodice());
+		for(Esercizio ei : elenco1)
+			System.out.println(ei.descriviti());
+		
+		System.out.println("\nTipologia:\n");
+		ArrayList<Esercizio> elenco2 = new ArrayList<>(p.elencoEserciziPerTipologia());
+		for(Esercizio ei : elenco2)
+			System.out.println(ei.descriviti());
+		
+		System.out.println("\nCorpo libero per calorie:\n");
+		ArrayList<Esercizio> elenco3 = new ArrayList<>(p.elencoEserciziCorpoLiberoPerCalorie());
+		for(Esercizio ei : elenco3)
+			System.out.println(ei.descriviti());
+		
+		System.out.println("\n/****** R3 ******/");
+		
+		System.out.println("Nuove schede");
+		ArrayList<String> eserciziScheda1 = new ArrayList<>();
+		eserciziScheda1.add("psu");
+		eserciziScheda1.add("rpj");
+		SchedaAllenamento s1 = p.nuovaSchedaAllenamento(0, "2021/12/03", eserciziScheda1);
+		
+		System.out.println("\nScheda creata:\n");
+		for(Esercizio ei : p.eserciziScheda(s1.getCodice()))
+			System.out.println(ei.descriviti());
+		
+		System.out.println("\nAggiunta esercizi:\n");
+		eserciziScheda1.add("sqt");
+		p.nuovaSchedaAllenamento(0, "2021/12/03", eserciziScheda1);
+		for(Esercizio ei : p.eserciziScheda("2021/12/03_0"))
+			System.out.println(ei.descriviti());
+		
+		System.out.println("\nRicerca scheda:\n");
+		SchedaAllenamento sTrovata = p.cercaSchedaPerId("2021/12/03_0");
+		for(Esercizio ei : p.eserciziScheda(sTrovata.getCodice()))
+			System.out.println(ei.descriviti());
+		
+		System.out.println("\nElenco schede per iscritto\n");
+		ArrayList<SchedaAllenamento> schedeTrovate = new ArrayList<>(p.elencoSchedePerIdIscritto(0));
+		
+		for (SchedaAllenamento si : schedeTrovate) {
+			System.out.println("Scheda:" + si.getCodice());
+			for(Esercizio ei : p.eserciziScheda(si.getCodice()))
+				System.out.println(ei.descriviti());
+		}
+		
+		System.out.println("\n/****** R4 ******/");
+		
+		System.out.println("\nLettura da file:\n");
+		Palestra p2 = new Palestra();
+		
+		p2.leggiDatiPalestra("input.txt");
+		
+		System.out.println("\nElenco iscritti:\n");
+		ArrayList<Iscritto> elencoIscritti2 = new ArrayList<>(p2.elencoIscritti());
+		for(Iscritto ii : elencoIscritti2)
+			System.out.println(ii.descriviti());
+		
+		System.out.println("\nElenco esercizi:\n");
+		ArrayList<Esercizio> elencoEsercizi2 = new ArrayList<>(p2.esercizi());
+		for(Esercizio ei : elencoEsercizi2)
+			System.out.println(ei.descriviti());
+	}
+
+}
+```
+
+### Palestra.java
+
+```java
+package palestra;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+
+public class Palestra {
+	
+	LinkedHashMap<Integer, Iscritto> iscritti;
+	LinkedHashMap<String, Esercizio> esercizi;
+	LinkedHashMap<String, SchedaAllenamento> schede;
+	
+	public Palestra() {
+		iscritti = new LinkedHashMap<>();
+		esercizi = new LinkedHashMap<>();
+		schede = new LinkedHashMap<>();
+	}
+	
+	public Iscritto nuovaIscrizione(String nome, String cognome, String sesso, int eta, double peso) {
+		
+		Iscritto i = null;
+		int codice = iscritti.size();
+		i = new Iscritto(codice, nome, cognome, sesso, eta, peso);
+		iscritti.put(codice, i);
+		
+		return i;
+	}
+	
+	public Iscritto cercaIscrittoPerId(int codice) {
+		return iscritti.get(codice);
+	}
+	
+	public Collection<Iscritto> cercaIscrittoPerNomeCognome(String nome, String cognome){
+		
+		ArrayList<Iscritto> ii = new ArrayList<>();
+		
+		for (Iscritto i : iscritti.values()) {
+			if (i.getNome().contains(nome) && i.getCognome().contains(cognome))
+				ii.add(i);
+		}
+		
+		Collections.sort(ii, new ComparatoreIscrittoNomeCognome());
+		
+		return ii;
+	}
+	
+	public Collection<Iscritto> elencoIscritti(){
+		ArrayList<Iscritto> ii = new ArrayList<>(iscritti.values());
+		
+		Collections.sort(ii, new ComparatoreIscrittoNomeCognome());
+		
+		return ii;
+	}
+	
+	public Cardio nuovoEsercizio(String codice, String descrizione, int minuti) {
+		Cardio c = null;
+		
+		if (!esercizi.containsKey(codice)) {
+			c = new Cardio(codice, descrizione, minuti);
+			esercizi.put(codice, c);
+		}
+		
+		return c;
+	}
+	
+	public Weightlifting nuovoEsercizio(String codice, String descrizione, int ripetizioni, int carico) {
+		Weightlifting w = null;
+		
+		if (!esercizi.containsKey(codice)) {
+			w = new Weightlifting(codice, descrizione, ripetizioni, carico);
+			esercizi.put(codice, w);
+		}
+		
+		return w;
+	}
+	
+	public CorpoLibero nuovoEsercizio(String codice, String descrizione, double calorie) {
+		CorpoLibero c = null;
+		
+		if (!esercizi.containsKey(codice)) {
+			c = new CorpoLibero(codice, descrizione, calorie);
+			esercizi.put(codice, c);
+		}
+		
+		return c;
+	}
+	
+	public Esercizio esercizio(String codice) {
+		return esercizi.get(codice);
+	}
+	
+	public Collection<Esercizio> esercizi() {
+		
+		if (esercizi.size() == 0)
+			return null;
+		
+		return esercizi.values();
+	}
+	
+	public Collection<Esercizio> elencoEserciziPerCodice() {
+		
+		ArrayList<Esercizio> ee = new ArrayList<>(esercizi.values());
+		Collections.sort(ee, new ComparatoreEsercizioCodice());
+		
+		return ee;
+	}
+	
+	public Collection<Esercizio> elencoEserciziPerTipologia() {
+		
+		ArrayList<Esercizio> res = new ArrayList<>();
+		ArrayList<Esercizio> car = new ArrayList<>();
+		ArrayList<Esercizio> wgt = new ArrayList<>();
+		ArrayList<Esercizio> cpl = new ArrayList<>();
+		
+		for (Esercizio ei : esercizi.values()) {
+			if (ei instanceof Cardio)
+				car.add(ei);
+			if (ei instanceof Weightlifting)
+				wgt.add(ei);
+			if (ei instanceof CorpoLibero)
+				cpl.add(ei);
+		}
+		
+		Collections.sort(wgt, new ComparatoreWeightliftingCaricoDescrescente());
+		res.addAll(car);
+		res.addAll(wgt);
+		res.addAll(cpl);
+		
+		return res;
+	}
+	
+	public Collection<Esercizio> elencoEserciziCorpoLiberoPerCalorie() {	
+		
+		ArrayList<Esercizio> cpl = new ArrayList<>();
+		
+		for (Esercizio ei : esercizi.values()) {
+			if (ei instanceof CorpoLibero)
+				cpl.add(ei);
+		}
+		
+		Collections.sort(cpl, new ComparatoreCorpoLiberoCalorie());
+		
+		return cpl;
+	}
+	
+  public SchedaAllenamento nuovaSchedaAllenamento(int codiceIscritto, String data,
+      Collection<String> codiciEsercizi) {
+		
+		ArrayList<Esercizio> eserciziEsistenti = new ArrayList<>();
+		Iscritto i = cercaIscrittoPerId(codiceIscritto);
+		SchedaAllenamento sa = null;
+		
+		for (String s : codiciEsercizi) {
+			Esercizio e = esercizio(s);
+			if (e != null) {
+				eserciziEsistenti.add(e);
+			}
+		}
+		
+		if (i != null && eserciziEsistenti.size() > 0) {
+			
+			String codice = data + "_" + i.getCodice();
+			
+			if (schede.containsKey(codice)) {
+				sa = schede.get(codice);
+				sa.aggiungiEsercizi(eserciziEsistenti);
+			}
+			else {
+				sa = new SchedaAllenamento(codice, i, eserciziEsistenti);
+				schede.put(codice, sa);
+				i.aggiungiScheda(sa);
+			}
+		}
+		
+		return sa;
+	}
+	
+	public Collection<Esercizio> eserciziScheda(String codiceScheda){
+		
+		ArrayList<Esercizio> ee = null;
+		SchedaAllenamento sa = schede.get(codiceScheda);
+		if (sa != null)
+			ee = new ArrayList<>(sa.getEsercizi());
+		
+		return ee;
+	}
+	
+	public SchedaAllenamento cercaSchedaPerId(String codiceScheda) throws SchedaNonEsistenteException{
+		
+		SchedaAllenamento sa = schede.get(codiceScheda);
+		if (sa==null) {
+			throw new SchedaNonEsistenteException();
+		}
+		
+		return sa;
+	}
+	
+  public Collection<SchedaAllenamento> elencoSchedePerIdIscritto(int codiceIscritto)
+    throws UtenteNonEsistenteException{
+		Iscritto i = cercaIscrittoPerId(codiceIscritto);
+		ArrayList<SchedaAllenamento> ss = null;
+		
+		if (i == null)
+			throw new UtenteNonEsistenteException();
+		
+		else {
+			ss = new ArrayList<>(i.getSchede());
+		}
+		
+		return ss;
+	}
+	
+	public void leggiDatiPalestra(String nomeFile) {	
+		
+		FileReader f;
+		try {
+			f = new FileReader(nomeFile);
+			try (BufferedReader b = new BufferedReader(f)) {
+				String line = "";
+				
+				while ((line = b.readLine()) != null){
+					String[] fields = line.split(";");
+					try {
+						if (fields[0].compareTo("I")==0) {
+              nuovaIscrizione(fields[1], fields[2], fields[3], Integer.parseInt(fields[4]),
+                  Double.parseDouble(fields[5]));
+						}						
+					}
+					catch(IndexOutOfBoundsException e){
+						e.printStackTrace();						
+					}
+					catch(NumberFormatException e){
+						e.printStackTrace();						
+					}
+					try {
+						if (fields[0].compareTo("C")==0) {
+							nuovoEsercizio(fields[1], fields[2], Integer.parseInt(fields[3]));
+						}						
+					}
+					catch(IndexOutOfBoundsException e){
+						e.printStackTrace();						
+					}
+					catch(NumberFormatException e){
+						e.printStackTrace();						
+					}
+					try {
+						if (fields[0].compareTo("W")==0) {
+              nuovoEsercizio(fields[1], fields[2], Integer.parseInt(fields[3]),
+                  Integer.parseInt(fields[4]));
+						}						
+					}
+					catch(IndexOutOfBoundsException e){
+						e.printStackTrace();						
+					}
+					catch(NumberFormatException e){
+						e.printStackTrace();						
+					}
+					try {
+						if (fields[0].compareTo("P")==0) {
+							nuovoEsercizio(fields[1], fields[2], Double.parseDouble(fields[3]));
+						}
+					}
+					catch(IndexOutOfBoundsException e){
+						e.printStackTrace();						
+					}
+					catch(NumberFormatException e){
+						e.printStackTrace();						
+					}
+					
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+		
+}
+```
+
+
 
