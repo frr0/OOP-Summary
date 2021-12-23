@@ -7,7 +7,7 @@ date: dicembre 16, 2021
 
 LICENSE
 
-Notes for the course Objects-Oriented Programming 
+Notes taken for the course Objects-Oriented Programming 
 Copyright © 2021 Francesco Ranellucci
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -1392,6 +1392,376 @@ public class Palestra {
 		
 }
 ```
+### Inscrtitto.java
+
+```java
+package palestra;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class Iscritto {
+	
+	public int getCodice() {
+		return codice;
+	}
+
+	public void setCodice(int codice) {
+		this.codice = codice;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getCognome() {
+		return cognome;
+	}
+
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+
+	public String getSesso() {
+		return sesso;
+	}
+
+	public void setSesso(String sesso) {
+		this.sesso = sesso;
+	}
+
+	public int getEta() {
+		return eta;
+	}
+
+	public void setEta(int eta) {
+		this.eta = eta;
+	}
+
+	public double getPeso() {
+		return peso;
+	}
+
+	public void setPeso(double peso) {
+		this.peso = peso;
+	}
+
+	private int codice;
+	private String nome;
+	private String cognome;
+	private String sesso;
+	private int eta;
+	private double peso;
+	ArrayList<SchedaAllenamento> schede;
+
+	public Iscritto(int codice, String nome, String cognome, String sesso, int eta, double peso) {
+		this.codice = codice;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.sesso = sesso;
+		this.eta = eta;
+		this.peso = peso;
+		// TODO Auto-generated constructor stub
+		schede = new ArrayList<>();
+	}
+
+	public String descriviti() {
+		return codice + " " + nome + " " + cognome + " " + sesso + " " + eta + " " + peso;
+	}
+
+	public void aggiungiScheda(SchedaAllenamento sa) {
+		// TODO Auto-generated method stub
+		schede.add(sa);
+	}
+	
+	public Collection<SchedaAllenamento> getSchede(){
+		return schede;
+	}
+
+}
+```
+
+### Esercizio.java
+
+```java
+package palestra;
+
+public class Esercizio {
+	
+	public String getCodice() {
+		return codice;
+	}
+
+	public void setCodice(String codice) {
+		this.codice = codice;
+	}
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
+	private String codice;
+	private String descrizione;
+
+	public Esercizio(String codice, String descrizione) {
+		this.codice = codice;
+		this.descrizione = descrizione;
+		// TODO Auto-generated constructor stub
+	}
+
+	public String descriviti() {
+		return codice + " " + descrizione;
+	}
+}
+```
+### Weightlifting.java
+
+```java
+
+package palestra;
+
+public class Weightlifting extends Esercizio {
+	public int getRipetizioni() {
+		return ripetizioni;
+	}
+
+	public void setRipetizioni(int ripetizioni) {
+		this.ripetizioni = ripetizioni;
+	}
+
+	public int getCarico() {
+		return carico;
+	}
+
+	public void setCarico(int carico) {
+		this.carico = carico;
+	}
+
+	private int ripetizioni;
+	private int carico;
+
+	public Weightlifting(String codice, String descrizione, int ripetizioni, int carico) {
+		// TODO Auto-generated constructor stub
+		super(codice, descrizione);
+		this.ripetizioni = ripetizioni;
+		this.carico = carico;
+	}
+
+	public String descriviti() {
+		return super.descriviti() +  " WGT " + ripetizioni + " " + carico;
+	}
+}
+```
+
+### Cardio.java
+
+```java
+package palestra;
+
+public class Cardio extends Esercizio {
+
+	private int minuti;
+
+	public Cardio(String codice, String descrizione, int minuti) {
+		// TODO Auto-generated constructor stub
+		super(codice, descrizione);
+		this.minuti = minuti;
+	}
+
+	public String descriviti() {
+		return super.descriviti() + " CAR " + minuti;
+	}
+}
+```
+
+### CorpoLibero.java
+
+```java
+package palestra;
+
+public class CorpoLibero extends Esercizio {
+	
+	public double getCalorie() {
+		return calorie;
+	}
+
+	public void setCalorie(double calorie) {
+		this.calorie = calorie;
+	}
+
+	private double calorie;
+
+	public CorpoLibero(String codice, String descrizione, double calorie) {
+		super(codice, descrizione);
+		this.calorie = calorie;
+		// TODO Auto-generated constructor stub
+	}
+
+	public String descriviti() {
+		return super.descriviti() +  " CPL " + calorie;
+	}
+
+}
+```
 
 
 
+
+### SchedaAllenamento.java
+
+```java
+package palestra;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class SchedaAllenamento {
+	
+	private String codice;
+	private Iscritto i;
+	private ArrayList<Esercizio> eserciziEsistenti;
+
+	public SchedaAllenamento(String codice, Iscritto i, ArrayList<Esercizio> eserciziEsistenti) {
+		this.codice = codice;
+		this.setI(i);
+		this.eserciziEsistenti = eserciziEsistenti;
+		// TODO Auto-generated constructor stub
+		
+	}
+
+	public String getCodice() {
+		return codice;
+	}
+
+	public void aggiungiEsercizi(ArrayList<Esercizio> esercizi) {
+		// TODO Auto-generated method stub
+		for (Esercizio ei : esercizi) {
+			if (!eserciziEsistenti.contains(ei))
+				eserciziEsistenti.add(ei);
+		}
+	}
+
+	public Collection<Esercizio> getEsercizi() {
+		// TODO Auto-generated method stub
+		return eserciziEsistenti;
+	}
+
+	public Iscritto getI() {
+		return i;
+	}
+
+	public void setI(Iscritto i) {
+		this.i = i;
+	}
+}
+```
+
+### SchedaNonEsistenteException.java
+
+```java
+package palestra;
+
+@SuppressWarnings("serial")
+public class SchedaNonEsistenteException extends Exception {
+	
+}
+```
+
+### UtenteNonEsistenteException.java
+
+```java
+package palestra;
+
+@SuppressWarnings("serial")
+public class UtenteNonEsistenteException extends Exception {
+
+}
+```
+
+
+### ComparatoreEsercizioCodice.java
+
+```java
+package palestra;
+
+import java.util.Comparator;
+
+public class ComparatoreEsercizioCodice implements Comparator<Esercizio> {
+
+	@Override
+	public int compare(Esercizio o1, Esercizio o2) {
+		// TODO Auto-generated method stub
+		return o1.getCodice().compareTo(o2.getCodice());
+	}
+
+}
+```
+
+### ComparatoreCorpoLiberoCalorie.java
+
+```java
+package palestra;
+
+import java.util.Comparator;
+
+public class ComparatoreCorpoLiberoCalorie implements Comparator<Esercizio> {
+
+	@Override
+	public int compare(Esercizio o1, Esercizio o2) {
+		// TODO Auto-generated method stub
+		CorpoLibero c1 = (CorpoLibero) o1;
+		CorpoLibero c2 = (CorpoLibero) o2;
+		return (int)(c1.getCalorie() - c2.getCalorie());
+	}
+}
+```
+
+
+### ComparatoreIscrittoNomeCognome.java
+
+```java
+package palestra;
+
+import java.util.Comparator;
+
+public class ComparatoreIscrittoNomeCognome implements Comparator<Iscritto> {
+
+	@Override
+	public int compare(Iscritto o1, Iscritto o2) {
+		// TODO Auto-generated method stub
+		
+		String nc1 = o1.getNome()+o1.getCognome();
+		String nc2 = o2.getNome()+o2.getCognome();
+		
+		return nc1.compareTo(nc2);
+	}
+}
+```
+
+### ComparatoreWeightliftingCaricoDescrescente.java
+
+
+```java
+package palestra;
+
+import java.util.Comparator;
+
+public class ComparatoreWeightliftingCaricoDescrescente implements Comparator<Esercizio> {
+
+	@Override
+	public int compare(Esercizio o1, Esercizio o2) {
+		// TODO Auto-generated method stub
+		Weightlifting w1 = (Weightlifting) o1;
+		Weightlifting w2 = (Weightlifting) o2;
+		return w2.getCarico()-w1.getCarico();
+	}
+}
+```
